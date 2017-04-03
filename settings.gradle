@@ -1,0 +1,3 @@
+include ':ejecta-v8', ':sample'
+// project(':stetho:stetho').projectDir = file("../stetho/stetho")
+// project(':stetho:stetho-urlconnection').projectDir = file("../stetho/stetho-urlconnection")

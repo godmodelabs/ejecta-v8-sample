@@ -1,0 +1,3 @@
+[submodule "ejecta-v8"]
+	path = ejecta-v8
+	url = http://git.dc1.boerse-go.de/applications/android/ejecta-v8.git

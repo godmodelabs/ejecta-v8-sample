@@ -1,0 +1,85 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "25.0.2"
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    /* productFlavors {
+        x86 {
+            ndk {
+                abiFilter "x86"
+            }
+            proguardFile 'proguard-project.txt'
+        }
+        arm {
+            ndk {
+                abiFilters "armeabi-v7a"
+            }
+            proguardFile 'proguard-project.txt'
+        }
+    } */
+
+    signingConfigs {
+        release {
+            storeFile file("/Users/kread/release/keystore")
+            keyAlias "market"
+            // These two lines make gradle believe that the signingConfigs
+            // section is complete. Without them, tasks like installRelease
+            // will not be available!
+            storePassword "notYourRealPassword"
+            keyPassword "notYourRealPassword"
+        }
+    }
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            // runProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+}
+
+
+/*
+// This snippet makes gradle not strip the embedded libraries anymore so we can debug v8
+tasks.whenTaskAdded { task ->
+
+    if (task.name.startsWith('transformNative_libsWithStripDebugSymbolFor')) {
+        task.finalizedBy copyUnstripedJniLibTask
+    }
+}
+
+task copyUnstripedJniLibTask() << {
+
+    def destDirRoot = new File(projectDir, "build/intermediates/transforms/stripDebugSymbol/debug/folders/")
+    if (!destDirRoot.isDirectory()) return
+
+    def destDir = destDirRoot
+    def srcDir = new File(destDirRoot.getAbsolutePath().replace("stripDebugSymbol", "mergeJniLibs"))
+
+    println "Copying unstriped jni libs ..."
+    println "    from ${srcDir}"
+    println "    to ${destDir}"
+
+    // Copy the unstripped so files to overwrite the striped ones.
+    FileUtils.copyDirectory(srcDir, destDir)
+} */
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:appcompat-v7:24.+'
+    compile 'com.android.support:support-v4:24.+'
+    debugCompile project(path: ':ejecta-v8', configuration: 'libraryDebug')
+}
