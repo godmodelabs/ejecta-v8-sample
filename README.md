@@ -1,4 +1,4 @@
-About
+# About
 
 This project is a sample app for the ejecta-v8 library (https://github.com/godmodelabs/ejecta-v8).
 
