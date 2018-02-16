@@ -1,28 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 27
+    buildToolsVersion "27.0.3"
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
-
-    /* productFlavors {
-        x86 {
-            ndk {
-                abiFilter "x86"
-            }
-            proguardFile 'proguard-project.txt'
-        }
-        arm {
-            ndk {
-                abiFilters "armeabi-v7a"
-            }
-            proguardFile 'proguard-project.txt'
-        }
-    } */
 
     signingConfigs {
         release {
@@ -38,7 +23,7 @@ android {
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 23
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
     }
@@ -49,6 +34,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+}
+
+repositories {
+    jcenter()
+    google()
+    maven { url "https://jitpack.io" }
+
 }
 
 
@@ -78,8 +70,10 @@ task copyUnstripedJniLibTask() << {
 } */
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:24.+'
-    compile 'com.android.support:support-v4:24.+'
-    debugCompile project(path: ':ejecta-v8', configuration: 'libraryDebug')
+    api fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion"
+    implementation "com.android.support:support-core-ui:$rootProject.ext.supportLibraryVersion"
+    implementation "com.android.support:support-fragment:$rootProject.ext.supportLibraryVersion"
+    implementation 'com.squareup.okhttp3:okhttp:3.9.1'
+    api project(':ejecta-v8')
 }

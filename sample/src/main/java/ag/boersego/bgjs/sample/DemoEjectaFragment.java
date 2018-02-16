@@ -1,7 +1,6 @@
 package ag.boersego.bgjs.sample;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -11,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import ag.boersego.bgjs.ClientAndroid;
+import ag.boersego.bgjs.JNIV8Function;
 import ag.boersego.bgjs.V8Engine;
 import ag.boersego.bgjs.V8TextureView;
 import ag.boersego.bgjs.sample.dummy.DummyContent;
@@ -42,6 +42,7 @@ public class DemoEjectaFragment extends Fragment implements V8Engine.V8EngineHan
     private static final String TAG = "DemoDetailFragment";
     private String mScriptCb = "startPlasma";
     private float mScale;
+    private JNIV8Function mStartPlasmaFunction;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -53,7 +54,7 @@ public class DemoEjectaFragment extends Fragment implements V8Engine.V8EngineHan
     public void onAttach(Context a) {
         super.onAttach(a);
 
-        mV8Engine = V8Engine.getInstance();
+        mV8Engine = V8Engine.getInstance(getActivity().getApplication(), "js/plasma.js");
         mV8Engine.setHttpClient(new OkHttpClient());
 
         mV8Engine.addStatusHandler(this);
@@ -75,11 +76,10 @@ public class DemoEjectaFragment extends Fragment implements V8Engine.V8EngineHan
     private void initializeV8 (final long jsId) {
         mJSId = jsId;
 
-        final float density = getResources().getDisplayMetrics().density;
-        final View jsView = (View)mView;
-        final int width = (int)(jsView.getWidth());
-        final int height = (int)(jsView.getHeight());
-        ClientAndroid.init(mV8Engine.getNativePtr(), jsId, width, height, mScriptCb);
+        final View jsView = mView;
+        final int width = jsView.getWidth();
+        final int height = jsView.getHeight();
+        ClientAndroid.init(mV8Engine, jsId, width, height, mScriptCb);
     }
 
     protected void createGLView() {
@@ -95,58 +95,34 @@ public class DemoEjectaFragment extends Fragment implements V8Engine.V8EngineHan
 
                 Log.d(TAG, "Creating GL view and calling callback " + mScriptCb);
 
-                if (Build.VERSION.SDK_INT > 10) {
-                    // HC and up have TextureVew
-                    final V8TextureView tv = new V8TextureView(getActivity(), mScriptCb, "") {
+                // HC and up have TextureVew
+                final V8TextureView tv = new V8TextureView(getActivity(), mScriptCb, "") {
 
-                        @Override
-                        public void onGLCreated(long jsId) {
-                            initializeV8(jsId);
-                        }
+                    @Override
+                    public void onGLCreated(long jsId) {
+                        initializeV8(jsId);
+                    }
 
-                        @Override
-                        public void onGLRecreated(long jsId) {
-                            onGLCreated(jsId);
-                        }
+                    @Override
+                    public void onGLRecreated(long jsId) {
+                        onGLCreated(jsId);
+                    }
 
-                        @Override
-                        public void onGLCreateError(Exception ex) {
-                            Log.d (TAG, "OpenGL error", ex);
-                        }
+                    @Override
+                    public void onGLCreateError(Exception ex) {
+                        Log.d (TAG, "OpenGL error", ex);
+                    }
 
-                        @Override
-                        public void onRenderAttentionNeeded(long jsId) {
+                    @Override
+                    public void onRenderAttentionNeeded(long jsId) {
 
-                        }
-                    };
-                    tv.doDebug(true);
-                    mView = tv;
-                } /* else {
-            mView = new V8GLSurfaceView(getActivity(), "viewCreated", "") {
-                @Override
-                public void onGLCreated(int jsId) {
-                    initializeV8(jsId);
-                }
+                    }
+                };
+                tv.doDebug(false);
+                tv.dontClearOnFlip(true);
+                mView = tv;
 
-                @Override
-                public void onGLRecreated(int jsId) {
-                    onGLCreated(jsId);
-                }
-
-                @Override
-                public void onGLCreateError(Exception ex, String moreInfo) {
-                    Log.d (TAG, "OpenGL error", ex);
-                }
-
-                @Override
-                public void onRenderAttentionNeeded(int jsId) {
-
-                }
-            };
-        } */
-                final View v = (View) mView;
-
-                mRootView.addView(v, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                mRootView.addView(mView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             }
         });
 

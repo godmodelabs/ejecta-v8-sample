@@ -73,7 +73,7 @@ function setup() {
 	ctx.font = '12pt arial';
 	ctx.globalAlpha = 1;
 	ctx.fillRect( 0, 0, w, h );
-	ctx.clearRect( 0, 0, w, h );
+	// ctx.clearRect( 0, 0, w, h );
 	console.log("setup: Cleared ", w, h);
 
 	ctx.globalAlpha = 0.05;
@@ -122,6 +122,7 @@ function startPlasma(ui,view,config) {
 	view.on('close',function() {
 	    requestNextFrame = null;
 	});
+	return 1;
 }
 
 function domReady() {
@@ -154,3 +155,8 @@ function domReady() {
 
     }
 }
+
+if (typeof global !== "undefined") {
+    global.startPlasma = startPlasma;
+}
+

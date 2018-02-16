@@ -1,5 +1,7 @@
 package ag.boersego.bgjs.sample;
 
+import android.content.pm.ApplicationInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -49,6 +51,11 @@ public class DemoWebviewFragment extends Fragment {
 
         WebView web = (WebView) view.findViewById(R.id.demo_webview);
         web.getSettings().setJavaScriptEnabled(true);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            if (0 != (getActivity().getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE))
+            { WebView.setWebContentsDebuggingEnabled(true); }
+        }
         web.loadUrl("file:///android_asset/" + mUrl);
 
         return view;
