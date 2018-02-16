@@ -128,20 +128,26 @@ function startPlasma(ui,view,config) {
 function domReady() {
     if (typeof document != "undefined") {
         // Only runs in browser
-        // w = window.innerWidth * window.devicePixelRatio;
-        //h = window.innerHeight * window.devicePixelRatio;
-        w = window.innerWidth;
-        h = window.innerHeight;
-        w2 = w;
-        h2 = h;
+        var scale = window.devicePixelRatio; // <--- Change to 1 on retina screens to see blurry canvas.
+        w = window.innerWidth * scale;
+        h = window.innerHeight * scale;
+        w2 = w / 2;
+        h2 = h / 2;
 
-        console.log("width, height: " + w + ", " + h);
+        console.log("width, height: " + w + ", " + h + ", " + scale);
 
         var canvas = document.getElementById('canvas');
-        canvas.width = w;
-        canvas.height = h;
+
+        // Set actual size in memory (scaled to account for extra pixel density).
+
+        // var scale = 1;
+        canvas.width = w / scale;
+        canvas.height = h / scale;
 
         ctx = canvas.getContext('2d');
+
+        // Normalize coordinate system to use css pixels.
+        ctx.scale(1 / scale, 1 / scale);
 
         requestNextFrame = function () {
             if (typeof requestAnimationFrame == "undefined") {

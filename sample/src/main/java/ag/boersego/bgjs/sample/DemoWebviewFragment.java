@@ -4,14 +4,18 @@ import android.content.pm.ApplicationInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.ConsoleMessage;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
 
 public class DemoWebviewFragment extends Fragment {
     private static final String ARG_PARAM = "param";
+    private static final String TAG = DemoWebviewFragment.class.getSimpleName();
 
     private String mUrl;
 
@@ -56,6 +60,16 @@ public class DemoWebviewFragment extends Fragment {
             if (0 != (getActivity().getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE))
             { WebView.setWebContentsDebuggingEnabled(true); }
         }
+
+        web.setWebChromeClient(new WebChromeClient() {
+            public boolean onConsoleMessage(ConsoleMessage cm) {
+                Log.d(TAG, cm.message() + " -- From line "
+                        + cm.lineNumber() + " of "
+                        + cm.sourceId() );
+                return true;
+            }
+        });
+
         web.loadUrl("file:///android_asset/" + mUrl);
 
         return view;
