@@ -12,7 +12,7 @@ buildscript {
 }
 
 ext {
-    supportLibraryVersion = '27.0.2'
+    supportLibraryVersion = '27.1.0'
     gradleVersion = 'com.android.tools.build:gradle:3.1.0-beta2'
 }
 

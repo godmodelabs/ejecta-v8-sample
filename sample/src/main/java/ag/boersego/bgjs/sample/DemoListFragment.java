@@ -1,6 +1,6 @@
 package ag.boersego.bgjs.sample;
 
-import android.app.Activity;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -96,7 +96,7 @@ public class DemoListFragment extends ListFragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Context activity) {
         super.onAttach(activity);
 
         // Activities containing this fragment must implement its callbacks.

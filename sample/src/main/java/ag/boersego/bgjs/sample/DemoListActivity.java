@@ -3,7 +3,8 @@ package ag.boersego.bgjs.sample;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 
 import ag.boersego.bgjs.V8Engine;
 
@@ -24,7 +25,7 @@ import ag.boersego.bgjs.V8Engine;
  * {@link DemoListFragment.Callbacks} interface
  * to listen for item selections.
  */
-public class DemoListActivity extends FragmentActivity
+public class DemoListActivity extends AppCompatActivity
         implements DemoListFragment.Callbacks {
 
     /**
@@ -40,7 +41,11 @@ public class DemoListActivity extends FragmentActivity
 
         mV8Instance = V8Engine.getInstance(getApplication(), "js/plasma.js");
 
+        setTitle("Ejecta-V8 demo");
+
         setContentView(R.layout.activity_demo_list);
+
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE);
 
         if (findViewById(R.id.demo_detail_container) != null) {
             // The detail container view will be present only in the
@@ -84,5 +89,17 @@ public class DemoListActivity extends FragmentActivity
             detailIntent.putExtra(DemoEjectaFragment.ARG_ITEM_ID, id);
             startActivity(detailIntent);
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mV8Instance.pause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mV8Instance.unpause();
     }
 }
