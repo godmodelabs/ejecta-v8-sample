@@ -86,7 +86,7 @@ function setup() {
 /**
  * Called by native once the native view is setup and OpenGL is ready
  */
-function startPlasma(ui,view,config) {
+function startPlasma(view) {
     console.log("viewCreated called", arguments);
 	w = view.width;
 	h = view.height;
@@ -166,3 +166,5 @@ if (typeof global !== "undefined") {
     global.startPlasma = startPlasma;
 }
 
+
+module.exports = startPlasma;

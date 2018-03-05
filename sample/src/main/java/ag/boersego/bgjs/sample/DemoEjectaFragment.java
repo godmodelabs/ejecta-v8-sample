@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import ag.boersego.bgjs.ClientAndroid;
+import ag.boersego.bgjs.BGJSGLView;
 import ag.boersego.bgjs.JNIV8Function;
 import ag.boersego.bgjs.V8Engine;
 import ag.boersego.bgjs.V8TextureView;
@@ -73,13 +73,8 @@ public class DemoEjectaFragment extends Fragment implements V8Engine.V8EngineHan
         mScale = getResources().getDisplayMetrics().density;
     }
 
-    private void initializeV8 (final long jsId) {
-        mJSId = jsId;
-
-        final View jsView = mView;
-        final int width = jsView.getWidth();
-        final int height = jsView.getHeight();
-        ClientAndroid.init(mV8Engine, jsId, width, height, mScriptCb);
+    private void initializeV8 (final BGJSGLView jsObj) {
+        mV8Engine.getGlobalObject().getV8FieldTyped("startPlasma", JNIV8Function.class).callAsV8Function(jsObj);
     }
 
     protected void createGLView() {
@@ -99,13 +94,13 @@ public class DemoEjectaFragment extends Fragment implements V8Engine.V8EngineHan
                 final V8TextureView tv = new V8TextureView(getActivity(), mScriptCb, "") {
 
                     @Override
-                    public void onGLCreated(long jsId) {
-                        initializeV8(jsId);
+                    public void onGLCreated(BGJSGLView jsViewObject) {
+                        initializeV8(jsViewObject);
                     }
 
                     @Override
-                    public void onGLRecreated(long jsId) {
-                        onGLCreated(jsId);
+                    public void onGLRecreated(BGJSGLView jsViewObject) {
+                        onGLCreated(jsViewObject);
                     }
 
                     @Override
@@ -114,7 +109,7 @@ public class DemoEjectaFragment extends Fragment implements V8Engine.V8EngineHan
                     }
 
                     @Override
-                    public void onRenderAttentionNeeded(long jsId) {
+                    public void onRenderAttentionNeeded(BGJSGLView jsViewObject) {
 
                     }
                 };
