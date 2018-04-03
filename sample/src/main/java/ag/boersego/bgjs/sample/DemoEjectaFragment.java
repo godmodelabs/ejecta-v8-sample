@@ -13,7 +13,6 @@ import ag.boersego.bgjs.BGJSGLView;
 import ag.boersego.bgjs.JNIV8Function;
 import ag.boersego.bgjs.V8Engine;
 import ag.boersego.bgjs.V8TextureView;
-import ag.boersego.bgjs.sample.dummy.DummyContent;
 import okhttp3.OkHttpClient;
 
 /**
@@ -54,7 +53,7 @@ public class DemoEjectaFragment extends Fragment implements V8Engine.V8EngineHan
     public void onAttach(Context a) {
         super.onAttach(a);
 
-        mV8Engine = V8Engine.getInstance(getActivity().getApplication(), "js/plasma.js");
+        mV8Engine = V8Engine.getInstance(getActivity().getApplication());
         mV8Engine.setHttpClient(new OkHttpClient());
 
         mV8Engine.addStatusHandler(this);
@@ -91,7 +90,7 @@ public class DemoEjectaFragment extends Fragment implements V8Engine.V8EngineHan
                 Log.d(TAG, "Creating GL view and calling callback " + mScriptCb);
 
                 // HC and up have TextureVew
-                final V8TextureView tv = new V8TextureView(getActivity(), mScriptCb, "") {
+                final V8TextureView tv = new V8TextureView(getActivity(), mV8Engine) {
 
                     @Override
                     public void onGLCreated(BGJSGLView jsViewObject) {
@@ -108,10 +107,6 @@ public class DemoEjectaFragment extends Fragment implements V8Engine.V8EngineHan
                         Log.d (TAG, "OpenGL error", ex);
                     }
 
-                    @Override
-                    public void onRenderAttentionNeeded(BGJSGLView jsViewObject) {
-
-                    }
                 };
                 tv.doDebug(false);
                 tv.dontClearOnFlip(true);
@@ -156,6 +151,7 @@ public class DemoEjectaFragment extends Fragment implements V8Engine.V8EngineHan
 
     @Override
     public void onReady() {
+        mV8Engine.require("js/plasma.js");
         mEngineReady = true;
         createGLView();
     }

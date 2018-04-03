@@ -39,7 +39,7 @@ public class DemoListActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mV8Instance = V8Engine.getInstance(getApplication(), "js/plasma.js");
+        mV8Instance = V8Engine.getInstance(getApplication());
 
         setTitle("Ejecta-V8 demo");
 

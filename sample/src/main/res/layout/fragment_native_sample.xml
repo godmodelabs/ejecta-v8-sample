@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <fragment
+        android:id="@+id/fragment"
+        android:name="com.example.common.logger.LogFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/button_art_gc"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button_allocate_simple"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/grid"
+        android:layout_marginLeft="@dimen/grid"
+        android:layout_marginStart="@dimen/grid"
+        android:text="Allocate simple object"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/button_unlink_simple" />
+
+    <Button
+        android:id="@+id/button_unlink_simple"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/grid"
+        android:layout_marginEnd="@dimen/grid"
+        android:layout_marginLeft="@dimen/grid"
+        android:layout_marginRight="@dimen/grid"
+        android:layout_marginStart="@dimen/grid"
+        android:text="Unlink simple object"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/button_allocate_simple" />
+
+    <Button
+        android:id="@+id/button_v8_gc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/grid"
+        android:layout_marginLeft="@dimen/grid"
+        android:layout_marginStart="@dimen/grid"
+        android:text="Start v8 GC"
+        app:layout_constraintBottom_toTopOf="@+id/button_allocate_simple"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/button_art_gc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/grid"
+        android:layout_marginLeft="@dimen/grid"
+        android:layout_marginStart="@dimen/grid"
+        android:layout_marginRight="@dimen/grid"
+        android:layout_marginEnd="@dimen/grid"
+        android:text="Start ART GC"
+        app:layout_constraintBottom_toTopOf="@+id/button_unlink_simple"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/button_v8_gc" />
+</android.support.constraint.ConstraintLayout>

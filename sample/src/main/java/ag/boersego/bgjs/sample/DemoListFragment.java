@@ -8,8 +8,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import ag.boersego.bgjs.sample.dummy.DummyContent;
-
 /**
  * A list fragment representing a list of Demos. This fragment
  * also supports tablet devices by allowing list items to be given an
