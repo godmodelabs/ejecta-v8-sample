@@ -39,9 +39,8 @@ public class DemoDetailActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             // Yes, this is super ugly, and I just quickly hacked this together to have a sample :)
 
-
-            final String argument = getIntent().getStringExtra(DemoEjectaFragment.ARG_ITEM_ID);
-            Fragment fragment = FragmentFactory.createFragment(argument, this);
+            final int argument = getIntent().getIntExtra(DemoEjectaFragment.ARG_ITEM_ID, 0);
+            Fragment fragment = Samples.INSTANCE.getITEM_MAP().get(argument).getCallback().invoke(this);
 
             if (fragment != null) {
                 getSupportFragmentManager().beginTransaction()

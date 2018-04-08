@@ -60,8 +60,6 @@ public class DemoListActivity extends AppCompatActivity
                     .findFragmentById(R.id.demo_list))
                     .setActivateOnItemClick(true);
         }
-
-        // TODO: If exposing deep links into your app, handle intents here.
     }
 
     /**
@@ -69,12 +67,12 @@ public class DemoListActivity extends AppCompatActivity
      * indicating that the item with the given ID was selected.
      */
     @Override
-    public void onItemSelected(String id) {
+    public void onItemSelected(Samples.SampleItem listItem) {
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
-            Fragment fragment = FragmentFactory.createFragment(id, this);
+            Fragment fragment = listItem.getCallback().invoke(this);
 
             if (fragment != null) {
                 getSupportFragmentManager().beginTransaction()
@@ -86,7 +84,7 @@ public class DemoListActivity extends AppCompatActivity
             // In single-pane mode, simply start the detail activity
             // for the selected item ID.
             Intent detailIntent = new Intent(this, DemoDetailActivity.class);
-            detailIntent.putExtra(DemoEjectaFragment.ARG_ITEM_ID, id);
+            detailIntent.putExtra(DemoEjectaFragment.ARG_ITEM_ID, listItem.getId());
             startActivity(detailIntent);
         }
     }

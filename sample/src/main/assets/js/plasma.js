@@ -167,4 +167,7 @@ if (typeof global !== "undefined") {
 }
 
 
-module.exports = startPlasma;
+// Register it via CommonJS
+if (typeof module !== "undefined") {
+    module.exports = startPlasma;
+}

@@ -1,6 +1,7 @@
-include ':ejecta-v8', ':sample'
-include ':ejecta-v8:v8annotations-compiler'
-include ':ejecta-v8:v8annotations'
+// include ':ejecta-v8', ':sample'
+include ':sample'
+//include ':ejecta-v8:v8annotations-compiler'
+//include ':ejecta-v8:v8annotations'
 
 // project(':stetho:stetho').projectDir = file("../stetho/stetho")
 // project(':stetho:stetho-urlconnection').projectDir = file("../stetho/stetho-urlconnection")

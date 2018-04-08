@@ -31,7 +31,7 @@ public class DemoEjectaFragment extends Fragment implements V8Engine.V8EngineHan
     /**
      * The dummy content this fragment is presenting.
      */
-    private DummyContent.DummyItem mItem;
+    private Samples.SampleItem mItem;
     private V8TextureView mView;
     private FrameLayout mRootView;
     private boolean mEngineReady;

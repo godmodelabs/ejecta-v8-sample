@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 27
@@ -11,18 +13,12 @@ android {
 
     signingConfigs {
         release {
-            storeFile file("/Users/kread/release/keystore")
-            keyAlias "market"
-            // These two lines make gradle believe that the signingConfigs
-            // section is complete. Without them, tasks like installRelease
-            // will not be available!
-            storePassword "notYourRealPassword"
-            keyPassword "notYourRealPassword"
+
         }
     }
 
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -39,34 +35,9 @@ android {
 repositories {
     jcenter()
     google()
-    maven { url "https://jitpack.io" }
+    maven { url 'https://dl.bintray.com/unverbraucht/ejecta-v8' }
 
 }
-
-/*
-// This snippet makes gradle not strip the embedded libraries anymore so we can debug v8
-tasks.whenTaskAdded { task ->
-
-    if (task.name.startsWith('transformNative_libsWithStripDebugSymbolFor')) {
-        task.finalizedBy copyUnstripedJniLibTask
-    }
-}
-
-task copyUnstripedJniLibTask() << {
-
-    def destDirRoot = new File(projectDir, "build/intermediates/transforms/stripDebugSymbol/debug/folders/")
-    if (!destDirRoot.isDirectory()) return
-
-    def destDir = destDirRoot
-    def srcDir = new File(destDirRoot.getAbsolutePath().replace("stripDebugSymbol", "mergeJniLibs"))
-
-    println "Copying unstriped jni libs ..."
-    println "    from ${srcDir}"
-    println "    to ${destDir}"
-
-    // Copy the unstripped so files to overwrite the striped ones.
-    FileUtils.copyDirectory(srcDir, destDir)
-} */
 
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
@@ -75,10 +46,12 @@ dependencies {
     implementation "com.android.support:support-fragment:$rootProject.ext.supportLibraryVersion"
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation 'com.squareup.okhttp3:okhttp:3.9.1'
-    api project(':ejecta-v8')
     implementation 'com.android.support:support-v4:27.1.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-}
+    implementation 'de.boersego:ejecta-v8:1.0.0'
+    implementation 'de.boersego:v8annotations:1.0.0'
+    kapt 'de.boersego:v8annotations-compiler:1.0.0'
 
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+    implementation 'com.jakewharton.timber:timber:4.6.0'
+
+}

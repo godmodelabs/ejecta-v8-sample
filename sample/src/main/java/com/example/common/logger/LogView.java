@@ -15,105 +15,109 @@
  */
 package com.example.common.logger;
 
-import android.app.Activity;
 import android.content.Context;
-import android.util.*;
-import android.widget.TextView;
+import android.support.v7.widget.AppCompatTextView;
+import android.text.method.ScrollingMovementMethod;
+import android.util.AttributeSet;
 
-import ag.boersego.bgjs.LogNode;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-/** Simple TextView which is used to output log data received through the LogNode interface.
+import timber.log.Timber;
+
+/** Simple TextView which is used to output log data received through the Timber.Tree class.
+ * Take from Android samples and adapted to Timber.
+ *
+ * It is licensed under Apache 2.0 license.
 */
-public class LogView extends TextView implements LogNode {
+public class LogView extends AppCompatTextView {
+
+    private Runnable mLogCallback;
 
     public LogView(Context context) {
         super(context);
+        setMovementMethod(new ScrollingMovementMethod());
     }
 
     public LogView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        setMovementMethod(new ScrollingMovementMethod());
     }
 
     public LogView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        setMovementMethod(new ScrollingMovementMethod());
     }
 
-    /**
-     * Formats the log data and prints it out to the LogView.
-     * @param priority Log level of the data being logged.  Verbose, Error, etc.
-     * @param tag Tag for for the log data.  Can be used to organize log statements.
-     * @param msg The actual message to be logged. The actual message to be logged.
-     * @param tr If an exception was thrown, this can be sent along for the logging facilities
-     *           to extract and print useful information.
-     */
-    @Override
-    public void println(int priority, String tag, String msg, Throwable tr) {
+    public Timber.Tree getTree() {
+        return mTree;
+    }
 
-        
-        String priorityStr = null;
+    private final Timber.Tree mTree = new Timber.Tree() {
+        @Override
+        protected void log(int priority, @Nullable String tag, @NotNull String msg, @Nullable Throwable tr) {
 
-        // For the purposes of this View, we want to print the priority as readable text.
-        switch(priority) {
-            case android.util.Log.VERBOSE:
-                priorityStr = "VERBOSE";
-                break;
-            case android.util.Log.DEBUG:
-                priorityStr = "DEBUG";
-                break;
-            case android.util.Log.INFO:
-                priorityStr = "INFO";
-                break;
-            case android.util.Log.WARN:
-                priorityStr = "WARN";
-                break;
-            case android.util.Log.ERROR:
-                priorityStr = "ERROR";
-                break;
-            case android.util.Log.ASSERT:
-                priorityStr = "ASSERT";
-                break;
-            default:
-                break;
-        }
 
-        // Handily, the Log class has a facility for converting a stack trace into a usable string.
-        String exceptionStr = null;
-        if (tr != null) {
-            exceptionStr = android.util.Log.getStackTraceString(tr);
-        }
+            String priorityStr = null;
 
-        // Take the priority, tag, message, and exception, and concatenate as necessary
-        // into one usable line of text.
-        final StringBuilder outputBuilder = new StringBuilder();
+            // For the purposes of this View, we want to print the priority as readable text.
+            switch(priority) {
+                case android.util.Log.VERBOSE:
+                    priorityStr = "VERBOSE";
+                    break;
+                case android.util.Log.DEBUG:
+                    priorityStr = "DEBUG";
+                    break;
+                case android.util.Log.INFO:
+                    priorityStr = "INFO";
+                    break;
+                case android.util.Log.WARN:
+                    priorityStr = "WARN";
+                    break;
+                case android.util.Log.ERROR:
+                    priorityStr = "ERROR";
+                    break;
+                case android.util.Log.ASSERT:
+                    priorityStr = "ASSERT";
+                    break;
+                default:
+                    break;
+            }
 
-        String delimiter = "\t";
-        appendIfNotNull(outputBuilder, priorityStr, delimiter);
-        appendIfNotNull(outputBuilder, tag, delimiter);
-        appendIfNotNull(outputBuilder, msg, delimiter);
-        appendIfNotNull(outputBuilder, exceptionStr, delimiter);
+            // Handily, the Log class has a facility for converting a stack trace into a usable string.
+            String exceptionStr = null;
+            if (tr != null) {
+                exceptionStr = android.util.Log.getStackTraceString(tr);
+            }
 
-        // In case this was originally called from an AsyncTask or some other off-UI thread,
-        // make sure the update occurs within the UI thread.
-        ((Activity) getContext()).runOnUiThread( (new Thread(new Runnable() {
-            @Override
-            public void run() {
+            // Take the priority, tag, message, and exception, and concatenate as necessary
+            // into one usable line of text.
+            final StringBuilder outputBuilder = new StringBuilder();
+
+            String delimiter = "  ";
+            appendIfNotNull(outputBuilder, priorityStr, delimiter);
+            appendIfNotNull(outputBuilder, msg, delimiter);
+            appendIfNotNull(outputBuilder, exceptionStr, delimiter);
+
+            // In case this was originally called from an AsyncTask or some other off-UI thread,
+            // make sure the update occurs within the UI thread.
+            post (() -> {
                 // Display the text we just generated within the LogView.
                 appendToLog(outputBuilder.toString());
-            }
-        })));
 
-        if (mNext != null) {
-            mNext.println(priority, tag, msg, tr);
+                // Now scroll to the end: find the amount we need to scroll.  This works by
+                // asking the TextView's internal layout for the position
+                // of the final line and then subtracting the TextView's height
+                final int scrollAmount = getLayout().getLineTop(getLineCount()) - getHeight();
+                // if there is no need to scroll, scrollAmount will be <=0
+                if (scrollAmount > 0)
+                    scrollTo(0, scrollAmount);
+                else
+                    scrollTo(0, 0);
+            });
+
         }
-    }
-
-    public LogNode getNext() {
-        return mNext;
-    }
-
-    public void setNext(LogNode node) {
-        mNext = node;
-    }
+    };
 
     /** Takes a string and adds to it, with a separator, if the bit to be added isn't null. Since
      * the logger takes so many arguments that might be null, this method helps cut out some of the
@@ -135,13 +139,11 @@ public class LogView extends TextView implements LogNode {
         return source;
     }
 
-    // The next LogNode in the chain.
-    LogNode mNext;
-
     /** Outputs the string as a new line of log data in the LogView. */
     public void appendToLog(String s) {
         append("\n" + s);
     }
+
 
 
 }

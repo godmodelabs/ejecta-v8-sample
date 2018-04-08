@@ -6,7 +6,6 @@
 
     <com.example.common.logger.LogView
         android:id="@+id/log_view"
-        android:typeface="monospace"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
@@ -15,9 +14,6 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="@android:color/black"
-        android:textColor="@android:color/holo_green_light"
-        android:textSize="10sp"
         app:layout_constraintBottom_toTopOf="@+id/button_crash"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,7 +26,7 @@
         android:layout_marginBottom="@dimen/grid"
         android:layout_marginLeft="@dimen/grid"
         android:layout_marginStart="@dimen/grid"
-        android:text="Say something"
+        android:text="Allocate simple obj."
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button_say_more" />
@@ -44,7 +40,7 @@
         android:layout_marginLeft="@dimen/grid"
         android:layout_marginRight="@dimen/grid"
         android:layout_marginStart="@dimen/grid"
-        android:text="Say more"
+        android:text="Unlink simple obj."
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/button_say_something" />
@@ -56,7 +52,7 @@
         android:layout_marginBottom="@dimen/grid"
         android:layout_marginLeft="@dimen/grid"
         android:layout_marginStart="@dimen/grid"
-        android:text="Log from JS"
+        android:text="Start v8 GC"
         app:layout_constraintBottom_toTopOf="@+id/button_say_something"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -69,7 +65,7 @@
         android:layout_marginStart="@dimen/grid"
         android:layout_marginRight="@dimen/grid"
         android:layout_marginEnd="@dimen/grid"
-        android:text="JS/Java Exception"
+        android:text="Start ART GC"
         app:layout_constraintBottom_toTopOf="@+id/button_say_more"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/button_log" />

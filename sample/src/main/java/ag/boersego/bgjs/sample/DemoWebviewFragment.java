@@ -1,5 +1,6 @@
 package ag.boersego.bgjs.sample;
 
+import android.annotation.SuppressLint;
 import android.content.pm.ApplicationInfo;
 import android.os.Build;
 import android.os.Bundle;
@@ -47,6 +48,7 @@ public class DemoWebviewFragment extends Fragment {
         }
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
